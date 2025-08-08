@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>便利ツール集</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-top: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .tool-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 35px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .tool-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .tool-description {
+            color: #6c757d;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 25px;
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+
+        .tool-link {
+            text-decoration: none;
+            background: #007bff;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .tool-link:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+                gap: 20px;
+            }
+            
+            .tool-card {
+                padding: 30px 25px;
+            }
+
+            header {
+                padding-top: 20px;
+                margin-bottom: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .tool-card {
+                padding: 25px 20px;
+            }
+
+            .tool-title {
+                font-size: 1.2rem;
+            }
+
+            .tool-description {
+                font-size: 0.9rem;
+            }
+
+            .tool-link {
+                padding: 10px 24px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>便利ツール集</h1>
+            <p class="subtitle">日常業務で使える便利なWebツール</p>
+        </header>
+
+        <main class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <span style="color: white;">📝</span>
+                </div>
+                <h2 class="tool-title">文字数カウントツール</h2>
+                <p class="tool-description">
+                    テキストを入力すると、文字数、単語数、行数などをリアルタイムで計測します。
+                </p>
+                <a href="文字数カウントツール/count/index.html" 
+                   class="tool-link">ツールを使う</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <span style="color: white;">🔐</span>
+                </div>
+                <h2 class="tool-title">パスワード生成ツール</h2>
+                <p class="tool-description">
+                    安全で強力なパスワードをワンクリックで生成します。長さや使用文字の指定も可能です。
+                </p>
+                <a href="パスワード生成ツール/index.html" 
+                   class="tool-link">ツールを使う</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <span style="color: white;">📱</span>
+                </div>
+                <h2 class="tool-title">QRコードジェネレーター</h2>
+                <p class="tool-description">
+                    入力したURLやテキストから、即座にQRコードを生成・ダウンロードできます。
+                </p>
+                <a href="QRコードジェネレーター/index.html" 
+                   class="tool-link">ツールを使う</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

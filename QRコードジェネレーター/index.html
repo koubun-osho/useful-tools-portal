@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコードジェネレーター</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../index.html" class="back-button">
+        <span>←</span>
+        <span>トップページへ戻る</span>
+    </a>
+    <div class="container">
+        <h1>QRコードジェネレーター</h1>
+        
+        <div class="input-section">
+            <label for="text-input">テキストまたはURL:</label>
+            <textarea id="text-input" placeholder="QRコードに変換したいテキストまたはURLを入力してください" rows="4"></textarea>
+            
+            <div class="options">
+                <div class="option-group">
+                    <label for="size">サイズ:</label>
+                    <select id="size">
+                        <option value="128">128x128</option>
+                        <option value="256" selected>256x256</option>
+                        <option value="384">384x384</option>
+                        <option value="512">512x512</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="color">色:</label>
+                    <input type="color" id="color" value="#000000">
+                </div>
+                
+                <div class="option-group">
+                    <label for="bg-color">背景色:</label>
+                    <input type="color" id="bg-color" value="#ffffff">
+                </div>
+            </div>
+            
+            <button id="generate-btn">QRコード生成</button>
+        </div>
+        
+        <div class="output-section">
+            <div id="qr-code"></div>
+            <button id="download-btn" style="display: none;">ダウンロード</button>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

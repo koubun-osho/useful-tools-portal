@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パスワード生成ツール</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .password-display {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        #passwordOutput {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            color: #333;
+            word-break: break-all;
+            min-height: 60px;
+            resize: none;
+        }
+
+        #copyButton {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        #copyButton:hover {
+            background: #5a67d8;
+        }
+
+        #copyButton.copied {
+            background: #48bb78;
+        }
+
+        .options {
+            margin-bottom: 30px;
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper label {
+            font-size: 16px;
+            color: #555;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .length-control {
+            margin-top: 25px;
+        }
+
+        .length-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .length-label span {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .length-value {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        #lengthSlider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        #lengthSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #lengthSlider::-webkit-slider-thumb:hover {
+            background: #5a67d8;
+        }
+
+        #lengthSlider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        #lengthSlider::-moz-range-thumb:hover {
+            background: #5a67d8;
+        }
+
+        .slider-marks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            padding: 0 5px;
+        }
+
+        .slider-marks span {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .strength-indicator {
+            margin-top: 15px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+            transition: width 0.3s, background-color 0.3s;
+            border-radius: 4px;
+        }
+
+        .strength-text {
+            margin-top: 8px;
+            font-size: 14px;
+            text-align: center;
+            color: #666;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-button">
+        <span>←</span>
+        <span>トップページへ戻る</span>
+    </a>
+    <div class="container">
+        <h1>🔐 パスワード生成ツール</h1>
+        
+        <div class="password-display">
+            <textarea id="passwordOutput" readonly placeholder="パスワードがここに表示されます"></textarea>
+            <button id="copyButton">コピー</button>
+        </div>
+
+        <div class="strength-indicator">
+            <div class="strength-bar" id="strengthBar"></div>
+        </div>
+        <div class="strength-text" id="strengthText"></div>
+
+        <div class="options">
+            <div class="option-group">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="useNumbers" checked>
+                    <label for="useNumbers">数字を使用 (0-9)</label>
+                </div>
+                
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="useLowercase" checked>
+                    <label for="useLowercase">小文字を使用 (a-z)</label>
+                </div>
+                
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="useUppercase" checked>
+                    <label for="useUppercase">大文字を使用 (A-Z)</label>
+                </div>
+                
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="useSymbols" checked>
+                    <label for="useSymbols">記号を使用 (!@#$%^&*)</label>
+                </div>
+            </div>
+
+            <div class="length-control">
+                <div class="length-label">
+                    <span>パスワードの長さ</span>
+                    <span class="length-value" id="lengthValue">16</span>
+                </div>
+                <input type="range" id="lengthSlider" min="4" max="128" value="16">
+                <div class="slider-marks">
+                    <span>4</span>
+                    <span>32</span>
+                    <span>64</span>
+                    <span>96</span>
+                    <span>128</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            少なくとも1つの文字タイプを選択してください
+        </div>
+    </div>
+
+    <script>
+        // Character sets
+        const charSets = {
+            numbers: '0123456789',
+            lowercase: 'abcdefghijklmnopqrstuvwxyz',
+            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        // Get DOM elements
+        const passwordOutput = document.getElementById('passwordOutput');
+        const copyButton = document.getElementById('copyButton');
+        const lengthSlider = document.getElementById('lengthSlider');
+        const lengthValue = document.getElementById('lengthValue');
+        const useNumbers = document.getElementById('useNumbers');
+        const useLowercase = document.getElementById('useLowercase');
+        const useUppercase = document.getElementById('useUppercase');
+        const useSymbols = document.getElementById('useSymbols');
+        const errorMessage = document.getElementById('errorMessage');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+
+        // Generate password function
+        function generatePassword() {
+            let charset = '';
+            
+            // Build character set based on selected options
+            if (useNumbers.checked) charset += charSets.numbers;
+            if (useLowercase.checked) charset += charSets.lowercase;
+            if (useUppercase.checked) charset += charSets.uppercase;
+            if (useSymbols.checked) charset += charSets.symbols;
+            
+            // Check if at least one option is selected
+            if (charset === '') {
+                passwordOutput.value = '';
+                errorMessage.style.display = 'block';
+                strengthBar.style.width = '0%';
+                strengthText.textContent = '';
+                return;
+            }
+            
+            errorMessage.style.display = 'none';
+            
+            const length = parseInt(lengthSlider.value);
+            let password = '';
+            
+            // Generate random password
+            const array = new Uint32Array(length);
+            crypto.getRandomValues(array);
+            
+            for (let i = 0; i < length; i++) {
+                password += charset[array[i] % charset.length];
+            }
+            
+            passwordOutput.value = password;
+            updateStrengthIndicator(password);
+        }
+
+        // Update password strength indicator
+        function updateStrengthIndicator(password) {
+            let strength = 0;
+            let strengthLabel = '';
+            
+            // Calculate strength based on length and character types
+            const length = password.length;
+            let typesUsed = 0;
+            
+            if (/[0-9]/.test(password)) typesUsed++;
+            if (/[a-z]/.test(password)) typesUsed++;
+            if (/[A-Z]/.test(password)) typesUsed++;
+            if (/[^0-9a-zA-Z]/.test(password)) typesUsed++;
+            
+            // Calculate strength score
+            if (length >= 8) strength += 20;
+            if (length >= 12) strength += 20;
+            if (length >= 16) strength += 20;
+            if (typesUsed >= 2) strength += 20;
+            if (typesUsed >= 4) strength += 20;
+            
+            // Set strength label and color
+            if (strength <= 20) {
+                strengthLabel = '弱い';
+                strengthBar.style.backgroundColor = '#e53e3e';
+            } else if (strength <= 40) {
+                strengthLabel = 'やや弱い';
+                strengthBar.style.backgroundColor = '#ed8936';
+            } else if (strength <= 60) {
+                strengthLabel = '普通';
+                strengthBar.style.backgroundColor = '#ecc94b';
+            } else if (strength <= 80) {
+                strengthLabel = '強い';
+                strengthBar.style.backgroundColor = '#48bb78';
+            } else {
+                strengthLabel = '非常に強い';
+                strengthBar.style.backgroundColor = '#38a169';
+            }
+            
+            strengthBar.style.width = strength + '%';
+            strengthText.textContent = `強度: ${strengthLabel}`;
+        }
+
+        // Copy password to clipboard
+        function copyPassword() {
+            if (passwordOutput.value) {
+                passwordOutput.select();
+                document.execCommand('copy');
+                
+                // Show feedback
+                copyButton.textContent = 'コピーしました！';
+                copyButton.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyButton.textContent = 'コピー';
+                    copyButton.classList.remove('copied');
+                }, 2000);
+            }
+        }
+
+        // Update length display
+        function updateLength() {
+            lengthValue.textContent = lengthSlider.value;
+            generatePassword();
+        }
+
+        // Event listeners
+        lengthSlider.addEventListener('input', updateLength);
+        useNumbers.addEventListener('change', generatePassword);
+        useLowercase.addEventListener('change', generatePassword);
+        useUppercase.addEventListener('change', generatePassword);
+        useSymbols.addEventListener('change', generatePassword);
+        copyButton.addEventListener('click', copyPassword);
+
+        // Generate initial password
+        generatePassword();
+    </script>
+</body>
+</html>

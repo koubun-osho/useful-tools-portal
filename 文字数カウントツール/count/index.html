@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字数カウントツール</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .counter {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .count-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+
+        .count-item:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+        }
+
+        .count-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .count-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+            display: block;
+        }
+
+        .instructions {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            color: #1565c0;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../../index.html" class="back-button">
+            <span>←</span>
+            <span>トップページへ戻る</span>
+        </a>
+        <h1>文字数カウントツール</h1>
+        
+        <div class="instructions">
+            テキストボックスに文章を入力すると、リアルタイムで文字数がカウントされます。
+        </div>
+
+        <textarea id="textInput" placeholder="ここに文章を入力してください..."></textarea>
+        
+        <div class="counter">
+            <div class="count-item">
+                <span class="count-label">総文字数</span>
+                <span class="count-value" id="totalChars">0</span>
+            </div>
+            <div class="count-item">
+                <span class="count-label">空白を除く文字数</span>
+                <span class="count-value" id="charsWithoutSpaces">0</span>
+            </div>
+            <div class="count-item">
+                <span class="count-label">単語数</span>
+                <span class="count-value" id="wordCount">0</span>
+            </div>
+            <div class="count-item">
+                <span class="count-label">行数</span>
+                <span class="count-value" id="lineCount">1</span>
+            </div>
+            <div class="count-item">
+                <span class="count-label">段落数</span>
+                <span class="count-value" id="paragraphCount">1</span>
+            </div>
+            <div class="count-item">
+                <span class="count-label">バイト数（UTF-8）</span>
+                <span class="count-value" id="byteCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const textInput = document.getElementById('textInput');
+        const totalChars = document.getElementById('totalChars');
+        const charsWithoutSpaces = document.getElementById('charsWithoutSpaces');
+        const wordCount = document.getElementById('wordCount');
+        const lineCount = document.getElementById('lineCount');
+        const paragraphCount = document.getElementById('paragraphCount');
+        const byteCount = document.getElementById('byteCount');
+
+        function updateCount() {
+            const text = textInput.value;
+            
+            // 総文字数
+            totalChars.textContent = text.length;
+            
+            // 空白を除く文字数
+            charsWithoutSpaces.textContent = text.replace(/\s/g, '').length;
+            
+            // 単語数（日本語と英語の混在に対応）
+            if (text.trim() === '') {
+                wordCount.textContent = '0';
+            } else {
+                // 日本語文字（ひらがな、カタカナ、漢字）、英数字、記号を単語として扱う
+                const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+                let totalWords = 0;
+                
+                words.forEach(word => {
+                    // 日本語文字が含まれている場合は文字数をカウント
+                    if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(word)) {
+                        totalWords += word.replace(/[^\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '').length;
+                    } else {
+                        // 英数字のみの場合は1単語としてカウント
+                        if (word.trim().length > 0) {
+                            totalWords += 1;
+                        }
+                    }
+                });
+                
+                wordCount.textContent = totalWords;
+            }
+            
+            // 行数
+            if (text === '') {
+                lineCount.textContent = '1';
+            } else {
+                lineCount.textContent = text.split('\n').length;
+            }
+            
+            // 段落数（空行で区切られた段落をカウント）
+            if (text.trim() === '') {
+                paragraphCount.textContent = '1';
+            } else {
+                const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+                paragraphCount.textContent = paragraphs.length;
+            }
+            
+            // バイト数（UTF-8）
+            byteCount.textContent = new Blob([text]).size;
+        }
+
+        // リアルタイムで文字数を更新
+        textInput.addEventListener('input', updateCount);
+        textInput.addEventListener('paste', function() {
+            // ペースト後に少し遅延して更新（ペースト内容が反映されるまで待つ）
+            setTimeout(updateCount, 10);
+        });
+
+        // 初期表示時にも実行
+        updateCount();
+    </script>
+</body>
+</html>

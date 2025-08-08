@@ -4,39 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>パスワード生成ツール</title>
+    <link rel="stylesheet" href="../css/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-
+        /* パスワード生成ツール専用スタイル */
         .password-display {
             position: relative;
             margin-bottom: 30px;
@@ -62,7 +32,7 @@
             top: 50%;
             transform: translateY(-50%);
             padding: 8px 15px;
-            background: #667eea;
+            background: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -72,11 +42,11 @@
         }
 
         #copyButton:hover {
-            background: #5a67d8;
+            background: #0056b3;
         }
 
         #copyButton.copied {
-            background: #48bb78;
+            background: #28a745;
         }
 
         .options {
@@ -92,6 +62,13 @@
             align-items: center;
             margin-bottom: 15px;
             cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .checkbox-wrapper:hover {
+            background-color: #f8f9fa;
         }
 
         .checkbox-wrapper input[type="checkbox"] {
@@ -125,7 +102,7 @@
         }
 
         .length-value {
-            background: #667eea;
+            background: #007bff;
             color: white;
             padding: 5px 15px;
             border-radius: 20px;
@@ -151,27 +128,27 @@
             width: 25px;
             height: 25px;
             border-radius: 50%;
-            background: #667eea;
+            background: #007bff;
             cursor: pointer;
             transition: background 0.3s;
         }
 
         #lengthSlider::-webkit-slider-thumb:hover {
-            background: #5a67d8;
+            background: #0056b3;
         }
 
         #lengthSlider::-moz-range-thumb {
             width: 25px;
             height: 25px;
             border-radius: 50%;
-            background: #667eea;
+            background: #007bff;
             cursor: pointer;
             border: none;
             transition: background 0.3s;
         }
 
         #lengthSlider::-moz-range-thumb:hover {
-            background: #5a67d8;
+            background: #0056b3;
         }
 
         .slider-marks {
@@ -187,7 +164,7 @@
         }
 
         .error-message {
-            color: #e53e3e;
+            color: #dc3545;
             font-size: 14px;
             margin-top: 10px;
             text-align: center;
@@ -214,35 +191,14 @@
             text-align: center;
             color: #666;
         }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: #6c757d;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
-            z-index: 10;
-        }
-
-        .back-button:hover {
-            background-color: #5a6268;
-        }
     </style>
 </head>
 <body>
-    <a href="../index.html" class="back-button">
-        <span>←</span>
-        <span>トップページへ戻る</span>
-    </a>
     <div class="container">
+        <a href="../index.html" class="back-button">
+            <span>←</span>
+            <span>トップページへ戻る</span>
+        </a>
         <h1>🔐 パスワード生成ツール</h1>
         
         <div class="password-display">
@@ -381,19 +337,19 @@
             // Set strength label and color
             if (strength <= 20) {
                 strengthLabel = '弱い';
-                strengthBar.style.backgroundColor = '#e53e3e';
+                strengthBar.style.backgroundColor = '#dc3545';
             } else if (strength <= 40) {
                 strengthLabel = 'やや弱い';
-                strengthBar.style.backgroundColor = '#ed8936';
+                strengthBar.style.backgroundColor = '#fd7e14';
             } else if (strength <= 60) {
                 strengthLabel = '普通';
-                strengthBar.style.backgroundColor = '#ecc94b';
+                strengthBar.style.backgroundColor = '#ffc107';
             } else if (strength <= 80) {
                 strengthLabel = '強い';
-                strengthBar.style.backgroundColor = '#48bb78';
+                strengthBar.style.backgroundColor = '#28a745';
             } else {
                 strengthLabel = '非常に強い';
-                strengthBar.style.backgroundColor = '#38a169';
+                strengthBar.style.backgroundColor = '#20c997';
             }
             
             strengthBar.style.width = strength + '%';
